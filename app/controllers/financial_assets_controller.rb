@@ -20,7 +20,7 @@ class FinancialAssetsController < ApplicationController
     if @financial_asset.save
       redirect_to financial_assets_url, notice: "Asset was successfully created."
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -30,7 +30,7 @@ class FinancialAssetsController < ApplicationController
     if @financial_asset.update(financial_asset_params)
       redirect_to financial_asset_path(@financial_asset), notice: "Asset was successfully updated."
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 

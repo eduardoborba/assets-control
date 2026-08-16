@@ -50,7 +50,7 @@ RSpec.describe "FinancialAssets", type: :request do
           post financial_assets_path, params: { asset: { name: "", category: nil, currency: nil } }
         }.not_to change(Asset, :count)
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
     end
   end
@@ -70,7 +70,7 @@ RSpec.describe "FinancialAssets", type: :request do
         asset = create(:asset)
         patch financial_asset_path(asset), params: { asset: { name: "" } }
         expect(asset.reload.name).to eq(asset.name)
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
     end
   end
