@@ -35,11 +35,15 @@ export default class extends Controller {
   onFocus(input) {
     const isRate = input.dataset.dollarRate !== undefined
     const divisor = isRate ? 10000 : 100
+    const decimals = isRate ? 4 : 2
     const raw = input.dataset.rawValue
 
     if (raw) {
       const value = parseInt(raw, 10) / divisor
-      input.value = value % 1 === 0 ? value.toFixed(isRate ? 4 : 2) : value
+      input.value = value.toLocaleString("pt-BR", {
+        minimumFractionDigits: decimals,
+        maximumFractionDigits: decimals
+      })
     }
   }
 
