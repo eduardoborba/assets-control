@@ -66,3 +66,6 @@ gem "rspec-rails", "~> 8.0", groups: [ :development, :test ]
 gem "factory_bot_rails", "~> 6.5", groups: [ :development, :test ]
 
 gem "shoulda-matchers", "~> 6.0", groups: [ :development, :test ]
+
+gem "vcr", "~> 6.3", groups: [ :development, :test ]
+gem "webmock", "~> 3.24", groups: [ :development, :test ]
