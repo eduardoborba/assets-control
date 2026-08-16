@@ -101,7 +101,7 @@ RSpec.describe "FinancialAssets", type: :request do
       asset1 = create(:asset, position: 1)
       asset2 = create(:asset, position: 2)
 
-      patch reorder_financial_assets_path, params: { asset_ids: [ asset2.id, asset1.id ] }
+      patch reorder_financial_assets_path, params: { asset_ids: [asset2.id, asset1.id] }
 
       expect(response).to have_http_status(:ok)
       expect(asset1.reload.position).to eq(2)
