@@ -1,2 +1,99 @@
-<h1 class="text-2xl font-bold">Dashboard</h1>
-<p class="mt-4 text-gray-600">Bem-vindo ao Assets Control</p>
+<div class="w-full" data-controller="chart" data-chart-data-value="<%= @chart_data.to_json %>">
+  <h1 class="text-2xl font-bold mb-6">Dashboard</h1>
+
+  <% if @latest_snapshot %>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+      <div class="bg-white border border-gray-200 rounded-lg p-4">
+        <p class="text-sm text-gray-500">Patrimônio Total</p>
+        <p class="text-2xl font-bold"><%= brl_currency(@total_cents) %></p>
+      </div>
+      <div class="bg-white border border-gray-200 rounded-lg p-4">
+        <p class="text-sm text-gray-500">Patrimônio Líquido</p>
+        <p class="text-2xl font-bold"><%= brl_currency(@liquid_total_cents) %></p>
+      </div>
+      <div class="bg-white border border-gray-200 rounded-lg p-4">
+        <p class="text-sm text-gray-500">Variação</p>
+        <p class="text-2xl font-bold <%= @variation_cents >= 0 ? 'text-green-600' : 'text-red-600' %>">
+          <%= @variation_cents >= 0 ? '+' : '' %><%= brl_currency(@variation_cents) %>
+          <span class="text-sm font-normal">(<%= @variation_pct >= 0 ? '+' : '' %><%= @variation_pct %>%)</span>
+        </p>
+      </div>
+      <div class="bg-white border border-gray-200 rounded-lg p-4">
+        <p class="text-sm text-gray-500">Qtd Ativos</p>
+        <p class="text-2xl font-bold"><%= @asset_count %></p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+      <div class="bg-white border border-gray-200 rounded-lg p-4">
+        <h2 class="text-lg font-semibold mb-4">Evolução Patrimonial</h2>
+        <div class="h-64">
+          <canvas data-chart-target="lineChart"></canvas>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 gap-6">
+        <div class="bg-white border border-gray-200 rounded-lg p-4">
+          <h2 class="text-lg font-semibold mb-4">Por Categoria</h2>
+          <div class="h-48">
+            <canvas data-chart-target="categoryChart"></canvas>
+          </div>
+        </div>
+        <div class="bg-white border border-gray-200 rounded-lg p-4">
+          <h2 class="text-lg font-semibold mb-4">Por Moeda</h2>
+          <div class="h-48">
+            <canvas data-chart-target="currencyChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white border border-gray-200 rounded-lg p-4">
+      <h2 class="text-lg font-semibold mb-4">Último Snapshot — <%= @latest_snapshot.taken_on.strftime("%d/%m/%Y") %></h2>
+      <table class="min-w-full">
+        <thead>
+          <tr class="bg-gray-100">
+            <th class="px-4 py-2 text-left border-b">Ativo</th>
+            <th class="px-4 py-2 text-left border-b">Moeda</th>
+            <th class="px-4 py-2 text-right border-b">Valor</th>
+            <th class="px-4 py-2 text-right border-b">Taxa USD</th>
+            <th class="px-4 py-2 text-right border-b">Valor BRL</th>
+            <th class="px-4 py-2 text-right border-b">%</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @latest_snapshot.asset_entries.includes(:asset).each do |entry| %>
+            <tr class="hover:bg-gray-50">
+              <td class="px-4 py-2 border-b"><%= entry.asset.name %></td>
+              <td class="px-4 py-2 border-b"><%= entry.asset.currency %></td>
+              <td class="px-4 py-2 border-b text-right"><%= brl_amount(entry.amount) %></td>
+              <td class="px-4 py-2 border-b text-right"><%= entry.dollar_rate ? brl_rate(entry.dollar_rate) : "-" %></td>
+              <td class="px-4 py-2 border-b text-right"><%= brl_currency(entry.value_in_brl_cents) %></td>
+              <td class="px-4 py-2 border-b text-right">
+                <%= @total_cents > 0 ? "%.1f%%" % (entry.value_in_brl_cents.to_f / @total_cents * 100) : "0.0%%" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+        <tfoot>
+          <tr class="bg-gray-50 font-bold">
+            <td colspan="4" class="px-4 py-2 border-b text-right">Total</td>
+            <td class="px-4 py-2 border-b text-right"><%= brl_currency(@total_cents) %></td>
+            <td class="px-4 py-2 border-b text-right">100%%</td>
+          </tr>
+          <tr class="bg-gray-50 font-bold">
+            <td colspan="4" class="px-4 py-2 border-b text-right">Total Líquido</td>
+            <td class="px-4 py-2 border-b text-right"><%= brl_currency(@liquid_total_cents) %></td>
+            <td class="px-4 py-2 border-b text-right">
+              <%= @total_cents > 0 ? "%.1f%%" % (@liquid_total_cents.to_f / @total_cents * 100) : "0.0%%" %>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  <% else %>
+    <div class="bg-white border border-gray-200 rounded-lg p-8 text-center">
+      <p class="text-gray-500 text-lg">Nenhum snapshot encontrado.</p>
+      <%= link_to "Criar primeiro snapshot", new_snapshot_path, class: "mt-4 inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" %>
+    </div>
+  <% end %>
+</div>
