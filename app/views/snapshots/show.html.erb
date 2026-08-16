@@ -1,0 +1,48 @@
+<div class="w-full">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold">Snapshot <%= @snapshot.taken_on.strftime("%d/%m/%Y") %></h1>
+    <div class="space-x-2">
+      <%= link_to "Editar", edit_snapshot_path(@snapshot), class: "text-gray-600 hover:underline" %>
+      <%= link_to "Voltar", snapshots_path, class: "text-gray-600 hover:underline" %>
+    </div>
+  </div>
+
+  <% if @snapshot.notes.present? %>
+    <div class="bg-gray-50 border border-gray-200 rounded p-4 mb-6">
+      <p class="text-gray-700"><%= @snapshot.notes %></p>
+    </div>
+  <% end %>
+
+  <table class="min-w-full bg-white border border-gray-200 mb-6">
+    <thead>
+      <tr class="bg-gray-100">
+        <th class="px-4 py-2 text-left border-b">Ativo</th>
+        <th class="px-4 py-2 text-left border-b">Moeda</th>
+        <th class="px-4 py-2 text-right border-b">Valor</th>
+        <th class="px-4 py-2 text-right border-b">Taxa USD</th>
+        <th class="px-4 py-2 text-right border-b">Valor BRL</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @snapshot.asset_entries.includes(:asset).each do |entry| %>
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-2 border-b"><%= entry.asset.name %></td>
+          <td class="px-4 py-2 border-b"><%= entry.asset.currency %></td>
+          <td class="px-4 py-2 border-b text-right"><%= brl_amount(entry.amount) %></td>
+          <td class="px-4 py-2 border-b text-right"><%= entry.dollar_rate ? brl_rate(entry.dollar_rate) : "-" %></td>
+          <td class="px-4 py-2 border-b text-right"><%= brl_currency(entry.value_in_brl_cents) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+    <tfoot>
+      <tr class="bg-gray-50 font-bold">
+        <td colspan="4" class="px-4 py-2 border-b text-right">Total</td>
+        <td class="px-4 py-2 border-b text-right"><%= brl_currency(@snapshot.total_brl_cents) %></td>
+      </tr>
+      <tr class="bg-gray-50 font-bold">
+        <td colspan="4" class="px-4 py-2 border-b text-right">Total Líquido</td>
+        <td class="px-4 py-2 border-b text-right"><%= brl_currency(@snapshot.liquid_total_brl_cents) %></td>
+      </tr>
+    </tfoot>
+  </table>
+</div>

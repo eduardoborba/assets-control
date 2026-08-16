@@ -1,0 +1,74 @@
+<%= form_with(model: snapshot, url: snapshot.persisted? ? snapshot_path(snapshot) : snapshots_path, data: { controller: "snapshot" }, class: "space-y-6") do |form| %>
+  <% if snapshot.errors.any? %>
+    <div class="bg-red-50 border border-red-200 rounded p-4 mb-4">
+      <h2 class="text-red-800 font-medium mb-2">
+        <%= pluralize(snapshot.errors.count, "error") %> prohibited this snapshot from being saved:
+      </h2>
+      <ul class="list-disc list-inside text-red-700 text-sm">
+        <% snapshot.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="grid grid-cols-2 gap-4">
+    <div>
+      <%= form.label :taken_on, "Data", class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= form.date_field :taken_on, class: "w-full border border-gray-300 rounded px-3 py-2", data: { action: "change->snapshot#fetchRate" } %>
+    </div>
+    <div>
+      <%= form.label :notes, "Notas", class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= form.text_field :notes, class: "w-full border border-gray-300 rounded px-3 py-2" %>
+    </div>
+  </div>
+
+  <div class="flex items-center space-x-4 mb-4">
+    <button type="button" data-action="click->snapshot#prefill" class="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300">
+      Preencher com último snapshot
+    </button>
+    <span id="rate-status" class="text-sm text-gray-500"></span>
+  </div>
+
+  <table class="min-w-full bg-white border border-gray-200">
+    <thead>
+      <tr class="bg-gray-100">
+        <th class="px-4 py-2 text-left border-b">Ativo</th>
+        <th class="px-4 py-2 text-left border-b">Moeda</th>
+        <th class="px-4 py-2 text-right border-b">Valor</th>
+        <th class="px-4 py-2 text-right border-b">Taxa USD</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= form.fields_for :asset_entries do |entry_form| %>
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-2 border-b">
+            <%= entry_form.object.asset.name %>
+            <%= entry_form.hidden_field :asset_id %>
+          </td>
+          <td class="px-4 py-2 border-b"><%= entry_form.object.asset.currency %></td>
+          <td class="px-4 py-2 border-b">
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 flex items-center pl-2 text-gray-500 text-sm"><%= entry_form.object.asset.usd? ? "$" : "R$" %></span>
+              <%= entry_form.text_field :amount, inputmode: "decimal", min: 0, class: "w-full border border-gray-300 rounded px-3 py-2 pl-8 text-right", data: { asset_id: entry_form.object.asset_id, currency: entry_form.object.asset.currency }, value: entry_form.object.amount %>
+            </div>
+          </td>
+          <td class="px-4 py-2 border-b">
+            <% if entry_form.object.asset.usd? %>
+              <div class="relative">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-2 text-gray-500 text-sm">$</span>
+                <%= entry_form.text_field :dollar_rate, inputmode: "decimal", min: 0, class: "w-full border border-gray-300 rounded px-3 py-2 pl-8 text-right", data: { asset_id: entry_form.object.asset_id, dollar_rate: true, currency: "USD" }, value: entry_form.object.dollar_rate %>
+              </div>
+            <% else %>
+              <span class="text-gray-400">-</span>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <div class="mt-4">
+    <%= form.submit "Salvar", class: "bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 cursor-pointer" %>
+  </div>
+<% end %>

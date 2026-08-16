@@ -3,7 +3,7 @@ class CreateExchangeRates < ActiveRecord::Migration[8.1]
     create_table :exchange_rates do |t|
       t.string :base_currency, null: false, limit: 3
       t.string :quote_currency, null: false, limit: 3
-      t.decimal :rate, null: false, precision: 12, scale: 6
+      t.bigint :rate, null: false
       t.date :fetched_on, null: false
 
       t.timestamps

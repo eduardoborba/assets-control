@@ -2,12 +2,12 @@ FactoryBot.define do
   factory :asset_entry do
     association :snapshot
     association :asset
-    amount { 1000.00 }
+    amount { 100_000 }
     dollar_rate { nil }
 
     trait :usd do
       association :asset, :usd
-      dollar_rate { 5.20 }
+      dollar_rate { 52_000 }
     end
 
     trait :brl do

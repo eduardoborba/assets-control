@@ -8,17 +8,17 @@ RSpec.describe DashboardService do
 
     let!(:snapshot1) do
       create(:snapshot, taken_on: 2.months.ago).tap do |s|
-        create(:asset_entry, snapshot: s, asset: brl_asset, amount: 1000)
-        create(:asset_entry, snapshot: s, asset: usd_asset, amount: 100, dollar_rate: 5.0)
-        create(:asset_entry, snapshot: s, asset: illiquid_asset, amount: 5000)
+        create(:asset_entry, snapshot: s, asset: brl_asset, amount: 100_000)
+        create(:asset_entry, snapshot: s, asset: usd_asset, amount: 10_000, dollar_rate: 50_000)
+        create(:asset_entry, snapshot: s, asset: illiquid_asset, amount: 500_000)
       end
     end
 
     let!(:snapshot2) do
       create(:snapshot, taken_on: 1.month.ago).tap do |s|
-        create(:asset_entry, snapshot: s, asset: brl_asset, amount: 1100)
-        create(:asset_entry, snapshot: s, asset: usd_asset, amount: 110, dollar_rate: 5.2)
-        create(:asset_entry, snapshot: s, asset: illiquid_asset, amount: 5100)
+        create(:asset_entry, snapshot: s, asset: brl_asset, amount: 110_000)
+        create(:asset_entry, snapshot: s, asset: usd_asset, amount: 11_000, dollar_rate: 52_000)
+        create(:asset_entry, snapshot: s, asset: illiquid_asset, amount: 510_000)
       end
     end
 
@@ -33,27 +33,27 @@ RSpec.describe DashboardService do
     it "calculates total BRL correctly" do
       result = described_class.new.call
 
-      expect(result[0][:total]).to eq(1000 + 500 + 5000)
-      expect(result[1][:total]).to eq(1100 + 572 + 5100)
+      expect(result[0][:total_cents]).to eq(100_000 + 50_000 + 500_000)
+      expect(result[1][:total_cents]).to eq(110_000 + 57_200 + 510_000)
     end
 
     it "calculates liquid total correctly" do
       result = described_class.new.call
 
-      expect(result[0][:liquid_total]).to eq(1000 + 500)
-      expect(result[1][:liquid_total]).to eq(1100 + 572)
+      expect(result[0][:liquid_total_cents]).to eq(100_000 + 50_000)
+      expect(result[1][:liquid_total_cents]).to eq(110_000 + 57_200)
     end
 
     it "groups by category" do
       result = described_class.new.call
 
-      expect(result[0][:by_category]).to include("stocks" => 1000, "fixed_income" => 500, "real_estate" => 5000)
+      expect(result[0][:by_category_cents]).to include("stocks" => 100_000, "fixed_income" => 50_000, "real_estate" => 500_000)
     end
 
     it "groups by currency" do
       result = described_class.new.call
 
-      expect(result[0][:by_currency]).to include("BRL" => 6000, "USD" => 500)
+      expect(result[0][:by_currency_cents]).to include("BRL" => 600_000, "USD" => 50_000)
     end
   end
 end

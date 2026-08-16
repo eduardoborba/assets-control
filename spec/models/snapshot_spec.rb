@@ -47,29 +47,29 @@ RSpec.describe Snapshot, type: :model do
     end
   end
 
-  describe "#total_brl" do
-    it "sums all entry values in BRL" do
+  describe "#total_brl_cents" do
+    it "sums all entry values in BRL cents" do
       snapshot = create(:snapshot)
       brl_asset = create(:asset, :brl)
       usd_asset = create(:asset, :usd)
 
-      create(:asset_entry, snapshot: snapshot, asset: brl_asset, amount: 1000)
-      create(:asset_entry, snapshot: snapshot, asset: usd_asset, amount: 100, dollar_rate: 5.20)
+      create(:asset_entry, snapshot: snapshot, asset: brl_asset, amount: 100_000)
+      create(:asset_entry, snapshot: snapshot, asset: usd_asset, amount: 10_000, dollar_rate: 52_000)
 
-      expect(snapshot.total_brl).to eq(1520.0)
+      expect(snapshot.total_brl_cents).to eq(152_000)
     end
   end
 
-  describe "#liquid_total_brl" do
-    it "sums only liquid asset entry values in BRL" do
+  describe "#liquid_total_brl_cents" do
+    it "sums only liquid asset entry values in BRL cents" do
       snapshot = create(:snapshot)
       liquid_asset = create(:asset, liquid: true, currency: "BRL")
       illiquid_asset = create(:asset, :illiquid, currency: "BRL")
 
-      create(:asset_entry, snapshot: snapshot, asset: liquid_asset, amount: 1000)
-      create(:asset_entry, snapshot: snapshot, asset: illiquid_asset, amount: 5000)
+      create(:asset_entry, snapshot: snapshot, asset: liquid_asset, amount: 100_000)
+      create(:asset_entry, snapshot: snapshot, asset: illiquid_asset, amount: 500_000)
 
-      expect(snapshot.liquid_total_brl).to eq(1000.0)
+      expect(snapshot.liquid_total_brl_cents).to eq(100_000)
     end
   end
 end
