@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://api.frankfurter.dev/v1/2026-08-16?from=USD&to=BRL
+    uri: https://api.frankfurter.dev/v2/rates?base=USD&date=2026-08-16&quotes=BRL
     body:
       encoding: US-ASCII
       string: ''
@@ -21,7 +21,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Sun, 16 Aug 2026 19:48:39 GMT
+      - Sun, 16 Aug 2026 21:57:36 GMT
       Content-Type:
       - application/json; charset=utf-8
       Transfer-Encoding:
@@ -29,25 +29,25 @@ http_interactions:
       Connection:
       - keep-alive
       Cache-Control:
-      - public, max-age=86400
+      - public, max-age=86400, stale-while-revalidate=86400, stale-if-error=86400
       Nel:
       - '{"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}'
       Vary:
       - Origin
       Age:
-      - '2807'
+      - '115'
       Report-To:
-      - '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=HnYuqGlcm%2B2uhBN0LMErtZozHGUajZG0UI1a3ooY%2F1pU%2BrtJ3a5eY%2F%2BPlXd5EZqOtenxjO1aTdJjQFNiBvocKjvUoj50pDSijwAClTa9k6Je5jny8OiJNY65mJNuT2ME0kQgdJE%3D"}]}'
+      - '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=jgnW302mw%2B9i7TtgeHXTEArf%2FgDc9B0GKYVBYHj6vu5xjlT%2F6LfjTX%2FHcfu7eStLoICuPg3Tpkwv2TiAJi%2BsrVjdvp1QQpbx3H%2FCxcgmyFyPijyJ2eLtYbC54pu%2Bf1BCLtMEDj8%3D"}]}'
       Cf-Cache-Status:
       - HIT
       Etag:
-      - W/"b385979152750471818cc5d071d4f6e7"
+      - W/"874ddef014ee0b336ab1df50b5d06af0"
       Server:
       - cloudflare
       Cf-Ray:
-      - a2c2f5319a0aa525-GRU
+      - a2c3b2152968808f-GRU
     body:
       encoding: ASCII-8BIT
-      string: '{"amount":1.0,"base":"USD","date":"2026-08-14","rates":{"BRL":5.1762}}'
-  recorded_at: Sun, 16 Aug 2026 19:49:03 GMT
+      string: '[{"date":"2026-08-16","base":"USD","quote":"BRL","rate":5.1854}]'
+  recorded_at: Sun, 16 Aug 2026 21:57:36 GMT
 recorded_with: VCR 6.4.0
