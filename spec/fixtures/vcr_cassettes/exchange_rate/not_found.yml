@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://api.frankfurter.dev/v1/2026-08-16?from=USD&to=BRL
+    uri: https://api.frankfurter.dev/v2/rates?date=2026-08-16&base=USD&quotes=BRL
     body:
       encoding: US-ASCII
       string: ''
@@ -17,13 +17,13 @@ http_interactions:
       - api.frankfurter.dev
   response:
     status:
-      code: 500
-      message: Internal Server Error
+      code: 404
+      message: Not Found
     headers:
       Content-Type:
       - application/json
     body:
       encoding: UTF-8
-      string: '{"error": "Internal server error"}'
-  recorded_at: Sun, 16 Aug 2026 19:49:03 GMT
+      string: '{"message":"Currency date not found"}'
+  recorded_at: Sun, 16 Aug 2026 21:57:36 GMT
 recorded_with: VCR 6.4.0

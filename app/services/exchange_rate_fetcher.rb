@@ -2,7 +2,7 @@ require "net/http"
 require "json"
 
 class ExchangeRateFetcher
-  BASE_URL = "https://api.frankfurter.dev/v1"
+  BASE_URL = "https://api.frankfurter.dev/v2"
   DEFAULT_RATE = 52_000
   RATE_SCALE = ExchangeRate::RATE_SCALE
 
@@ -40,12 +40,13 @@ class ExchangeRateFetcher
   end
 
   def fetch_rate
-    uri = URI("#{BASE_URL}/#{@date}?from=#{@base_currency}&to=#{@quote_currency}")
+    uri = URI("#{BASE_URL}/rates?date=#{@date}&base=#{@base_currency}&quotes=#{@quote_currency}")
     response = Net::HTTP.get_response(uri)
 
     return nil unless response.is_a?(Net::HTTPSuccess)
 
-    float_rate = JSON.parse(response.body).dig("rates", @quote_currency)
+    data = JSON.parse(response.body)
+    float_rate = data.first&.dig("rate")
     (float_rate * RATE_SCALE).round if float_rate
   rescue JSON::ParserError, StandardError => e
     Rails.logger.warn("ExchangeRateFetcher: failed to fetch rate for #{@date}: #{e.message}")
