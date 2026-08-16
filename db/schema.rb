@@ -15,10 +15,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_16_190125) do
   enable_extension "pg_catalog.plpgsql"
 
   create_table "asset_entries", force: :cascade do |t|
-    t.decimal "amount", precision: 15, scale: 2, default: "0.0", null: false
+    t.bigint "amount", default: 0, null: false
     t.bigint "asset_id", null: false
     t.datetime "created_at", null: false
-    t.decimal "dollar_rate", precision: 8, scale: 4
+    t.bigint "dollar_rate"
     t.bigint "snapshot_id", null: false
     t.datetime "updated_at", null: false
     t.index ["asset_id"], name: "index_asset_entries_on_asset_id"
@@ -44,7 +44,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_16_190125) do
     t.datetime "created_at", null: false
     t.date "fetched_on", null: false
     t.string "quote_currency", limit: 3, null: false
-    t.decimal "rate", precision: 12, scale: 6, null: false
+    t.bigint "rate", null: false
     t.datetime "updated_at", null: false
     t.index ["base_currency", "quote_currency", "fetched_on"], name: "index_exchange_rates_on_currencies_and_date", unique: true
   end

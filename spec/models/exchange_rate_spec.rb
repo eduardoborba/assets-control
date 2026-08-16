@@ -7,7 +7,7 @@ RSpec.describe ExchangeRate, type: :model do
     it { should validate_presence_of(:quote_currency) }
     it { should validate_length_of(:quote_currency).is_equal_to(3) }
     it { should validate_presence_of(:rate) }
-    it { should validate_numericality_of(:rate).is_greater_than(0) }
+    it { should validate_numericality_of(:rate).is_greater_than(0).only_integer }
     it { should validate_presence_of(:fetched_on) }
 
     it "validates uniqueness of base_currency scoped to quote_currency and fetched_on" do
@@ -42,8 +42,8 @@ RSpec.describe ExchangeRate, type: :model do
 
   describe ".find_rate" do
     it "returns the most recent rate for a pair on or before the given date" do
-      old_rate = create(:exchange_rate, base_currency: "USD", quote_currency: "BRL", rate: 5.0, fetched_on: 1.week.ago)
-      new_rate = create(:exchange_rate, base_currency: "USD", quote_currency: "BRL", rate: 5.2, fetched_on: 1.day.ago)
+      old_rate = create(:exchange_rate, base_currency: "USD", quote_currency: "BRL", rate: 50_000, fetched_on: 1.week.ago)
+      new_rate = create(:exchange_rate, base_currency: "USD", quote_currency: "BRL", rate: 52_000, fetched_on: 1.day.ago)
 
       result = ExchangeRate.find_rate(base: "USD", quote: "BRL", on_date: Date.current)
       expect(result).to eq(new_rate)

@@ -27,7 +27,7 @@ Personal finance asset tracker built with Rails 8. Tracks assets across multiple
 - Use Rails conventions (singular model names, plural table names)
 - Prefer scopes over class methods for query logic
 - Use `dependent:` option on all `has_many` associations
-- Decimal precision: amounts use `precision: 15, scale: 2`, rates use `precision: 12, scale: 6` or `precision: 8, scale: 4`
+- **All monetary values stored as integers (cents).** Amounts: cents (e.g., 100000 = R$1.000,00). Rates: value * 10000 (e.g., 51762 = 5.1762). Use `RATE_SCALE = 10_000` constant.
 - No comments unless explicitly requested
 
 ## Testing Requirements

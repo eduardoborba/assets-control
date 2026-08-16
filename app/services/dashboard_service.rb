@@ -9,33 +9,33 @@ class DashboardService
     snapshots.map do |snapshot|
       {
         date: snapshot.taken_on,
-        total: total_brl(snapshot),
-        liquid_total: liquid_total_brl(snapshot),
-        by_category: by_category(snapshot),
-        by_currency: by_currency(snapshot)
+        total_cents: total_brl_cents(snapshot),
+        liquid_total_cents: liquid_total_brl_cents(snapshot),
+        by_category_cents: by_category_cents(snapshot),
+        by_currency_cents: by_currency_cents(snapshot)
       }
     end
   end
 
   private
 
-  def total_brl(snapshot)
-    snapshot.asset_entries.sum { |entry| entry.value_in_brl }
+  def total_brl_cents(snapshot)
+    snapshot.asset_entries.sum { |entry| entry.value_in_brl_cents }
   end
 
-  def liquid_total_brl(snapshot)
-    snapshot.asset_entries.select { |e| e.asset.liquid? }.sum { |entry| entry.value_in_brl }
+  def liquid_total_brl_cents(snapshot)
+    snapshot.asset_entries.select { |e| e.asset.liquid? }.sum { |entry| entry.value_in_brl_cents }
   end
 
-  def by_category(snapshot)
+  def by_category_cents(snapshot)
     snapshot.asset_entries
       .group_by { |e| e.asset.category }
-      .transform_values { |entries| entries.sum { |e| e.value_in_brl } }
+      .transform_values { |entries| entries.sum { |e| e.value_in_brl_cents } }
   end
 
-  def by_currency(snapshot)
+  def by_currency_cents(snapshot)
     snapshot.asset_entries
       .group_by { |e| e.asset.currency }
-      .transform_values { |entries| entries.sum { |e| e.value_in_brl } }
+      .transform_values { |entries| entries.sum { |e| e.value_in_brl_cents } }
   end
 end

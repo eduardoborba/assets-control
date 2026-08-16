@@ -1,7 +1,9 @@
 class ExchangeRate < ApplicationRecord
+  RATE_SCALE = 10_000
+
   validates :base_currency, presence: true, length: { is: 3 }
   validates :quote_currency, presence: true, length: { is: 3 }
-  validates :rate, presence: true, numericality: { greater_than: 0 }
+  validates :rate, presence: true, numericality: { greater_than: 0, only_integer: true }
   validates :fetched_on, presence: true
   validates :base_currency, uniqueness: { scope: [ :quote_currency, :fetched_on ] }
 
@@ -14,5 +16,9 @@ class ExchangeRate < ApplicationRecord
       .where("fetched_on <= ?", on_date)
       .latest_first
       .first
+  end
+
+  def rate_reais
+    rate / RATE_SCALE.to_f
   end
 end
