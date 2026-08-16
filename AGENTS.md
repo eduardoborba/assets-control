@@ -33,6 +33,9 @@ Personal finance asset tracker built with Rails 8. Tracks assets across multiple
 ## Testing Requirements
 - Write specs for all models, services, and controllers
 - Use FactoryBot traits for variations (e.g. `:usd`, `:brl`, `:illiquid`)
+- Use VCR cassettes for external API calls (preferred over mocking)
+- To record new cassettes, temporarily add `record: :all` to `spec/support/vcr.rb`, run the specs, then remove the option
+- Avoid manually editing VCR cassettes unless mocking something hard to replicate (e.g. API failures)
 - Run `bundle exec rspec` before committing — all tests must pass
 - Run `bin/rubocop` — no new offenses allowed
 - Run `bin/rubocop -A` to auto-correct style issues
