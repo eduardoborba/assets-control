@@ -1,0 +1,30 @@
+<div class="w-full">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold"><%= @financial_asset.name %></h1>
+    <div class="space-x-2">
+      <%= link_to "Editar", edit_financial_asset_path(@financial_asset), class: "text-gray-600 hover:underline" %>
+      <%= link_to "Voltar", financial_assets_path, class: "text-gray-600 hover:underline" %>
+    </div>
+  </div>
+
+  <div class="bg-white border border-gray-200 rounded p-6 mb-6">
+    <dl class="grid grid-cols-2 gap-4">
+      <div>
+        <dt class="text-sm text-gray-500">Categoria</dt>
+        <dd class="font-medium"><%= @financial_asset.category.humanize %></dd>
+      </div>
+      <div>
+        <dt class="text-sm text-gray-500">Moeda</dt>
+        <dd class="font-medium"><%= @financial_asset.currency %></dd>
+      </div>
+      <div>
+        <dt class="text-sm text-gray-500">Líquido</dt>
+        <dd class="font-medium"><%= @financial_asset.liquid? ? "Sim" : "Não" %></dd>
+      </div>
+      <div>
+        <dt class="text-sm text-gray-500">Posição</dt>
+        <dd class="font-medium"><%= @financial_asset.position %></dd>
+      </div>
+    </dl>
+  </div>
+</div>

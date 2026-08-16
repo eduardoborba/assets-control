@@ -1,0 +1,38 @@
+<%= form_with(model: financial_asset, url: financial_asset.persisted? ? financial_asset_path(financial_asset) : financial_assets_path, class: "space-y-4") do |form| %>
+  <% if financial_asset.errors.any? %>
+    <div class="bg-red-50 border border-red-200 rounded p-4 mb-4">
+      <h2 class="text-red-800 font-medium mb-2">
+        <%= pluralize(financial_asset.errors.count, "error") %> prohibited this asset from being saved:
+      </h2>
+      <ul class="list-disc list-inside text-red-700 text-sm">
+        <% financial_asset.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :name, "Nome", class: "block text-sm font-medium text-gray-700 mb-1" %>
+    <%= form.text_field :name, class: "w-full border border-gray-300 rounded px-3 py-2" %>
+  </div>
+
+  <div>
+    <%= form.label :category, "Categoria", class: "block text-sm font-medium text-gray-700 mb-1" %>
+    <%= form.select :category, Asset.categories.keys.map { |c| [c.humanize, c] }, {}, class: "w-full border border-gray-300 rounded px-3 py-2" %>
+  </div>
+
+  <div>
+    <%= form.label :currency, "Moeda", class: "block text-sm font-medium text-gray-700 mb-1" %>
+    <%= form.select :currency, ["BRL", "USD"], {}, class: "w-full border border-gray-300 rounded px-3 py-2" %>
+  </div>
+
+  <div class="flex items-center space-x-2">
+    <%= form.check_box :liquid, class: "rounded" %>
+    <%= form.label :liquid, "Líquido", class: "text-sm font-medium text-gray-700" %>
+  </div>
+
+  <div>
+    <%= form.submit "Salvar", class: "bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 cursor-pointer" %>
+  </div>
+<% end %>

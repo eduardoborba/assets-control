@@ -1,0 +1,38 @@
+<div class="w-full">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold">Ativos</h1>
+    <%= link_to "Novo Ativo", new_financial_asset_path, class: "bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" %>
+  </div>
+
+  <table class="min-w-full bg-white border border-gray-200">
+    <thead>
+      <tr class="bg-gray-100">
+        <th class="px-4 py-2 text-left border-b w-8"></th>
+        <th class="px-4 py-2 text-left border-b">Nome</th>
+        <th class="px-4 py-2 text-left border-b">Categoria</th>
+        <th class="px-4 py-2 text-left border-b">Moeda</th>
+        <th class="px-4 py-2 text-left border-b">Líquido</th>
+        <th class="px-4 py-2 text-left border-b">Ações</th>
+      </tr>
+    </thead>
+    <tbody data-controller="sortable">
+      <% @financial_assets.each do |asset| %>
+        <tr class="hover:bg-gray-50" data-id="<%= asset.id %>">
+          <td class="px-4 py-2 border-b cursor-move drag-handle text-gray-400 select-none">
+            <span class="text-lg leading-none">&vellip;</span>
+          </td>
+          <td class="px-4 py-2 border-b">
+            <%= link_to asset.name, financial_asset_path(asset), class: "text-blue-600 hover:underline" %>
+          </td>
+          <td class="px-4 py-2 border-b"><%= asset.category.humanize %></td>
+          <td class="px-4 py-2 border-b"><%= asset.currency %></td>
+          <td class="px-4 py-2 border-b"><%= asset.liquid? ? "Sim" : "Não" %></td>
+          <td class="px-4 py-2 border-b space-x-2">
+            <%= link_to "Editar", edit_financial_asset_path(asset), class: "text-gray-600 hover:underline" %>
+            <%= link_to "Excluir", financial_asset_path(asset), data: { turbo_method: :delete, turbo_confirm: "Tem certeza?" }, class: "text-red-600 hover:underline" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
