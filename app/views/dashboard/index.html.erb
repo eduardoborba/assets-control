@@ -76,16 +76,12 @@
         </tbody>
         <tfoot>
           <tr class="bg-gray-50 font-bold">
-            <td colspan="4" class="px-4 py-2 border-b text-right">Total</td>
+            <td colspan="5" class="px-4 py-2 border-b text-right">Total</td>
             <td class="px-4 py-2 border-b text-right"><%= brl_currency(@total_cents) %></td>
-            <td class="px-4 py-2 border-b text-right">100%%</td>
           </tr>
           <tr class="bg-gray-50 font-bold">
-            <td colspan="4" class="px-4 py-2 border-b text-right">Total Líquido</td>
+            <td colspan="5" class="px-4 py-2 border-b text-right">Total Líquido</td>
             <td class="px-4 py-2 border-b text-right"><%= brl_currency(@liquid_total_cents) %></td>
-            <td class="px-4 py-2 border-b text-right">
-              <%= @total_cents > 0 ? "%.1f%%" % (@liquid_total_cents.to_f / @total_cents * 100) : "0.0%%" %>
-            </td>
           </tr>
         </tfoot>
       </table>
