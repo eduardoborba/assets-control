@@ -137,25 +137,16 @@ Date | Notes | Total | Liquid Total | Actions.
 
 ## Implementation Phases
 
-### Phase 1: Models & Migrations
-Generate migrations, implement models (associations, validations, enums, scopes), model specs + factories.
+Each phase is implemented on a **separate branch** (e.g. `phase/1-models-and-migrations`). After implementation, a **Pull Request** is opened against `main` for manual review and merge. Phases are sequential — each PR is based on the previous merged phase.
 
-### Phase 2: Services
-1. `ExchangeRateFetcher` + specs (API call, caching, fallback)
-2. `EntryValueService` + specs
-3. `DashboardService` + specs
-
-### Phase 3: Assets CRUD
-Controller, views, routes, request specs.
-
-### Phase 4: Snapshots CRUD + Batch Entry
-Controller with nested attributes, snapshot form with pre-fill from previous snapshot, request specs.
-
-### Phase 5: Dashboard & Charts
-Pin Chart.js, build `chart_controller.js` Stimulus controller, dashboard with summary cards + charts, per-asset chart.
-
-### Phase 6: Seed Data & Polish
-Seed script, navigation layout, responsive design, currency formatting, final review.
+| Phase | Branch | PR Title | Description |
+|-------|--------|----------|-------------|
+| 1 | `phase/1-models-and-migrations` | "Phase 1: Models & Migrations" | Generate migrations, implement models (associations, validations, enums, scopes), model specs + factories |
+| 2 | `phase/2-services` | "Phase 2: Services" | `ExchangeRateFetcher` + `EntryValueService` + `DashboardService` with specs |
+| 3 | `phase/3-assets-crud` | "Phase 3: Assets CRUD" | Controller, views, routes, request specs |
+| 4 | `phase/4-snapshots-crud` | "Phase 4: Snapshots CRUD + Batch Entry" | Controller with nested attributes, snapshot form with pre-fill from previous snapshot, request specs |
+| 5 | `phase/5-dashboard-and-charts` | "Phase 5: Dashboard & Charts" | Pin Chart.js, build `chart_controller.js` Stimulus controller, dashboard with summary cards + charts, per-asset chart |
+| 6 | `phase/6-seed-data-and-polish` | "Phase 6: Seed Data & Polish" | Seed script, navigation layout, responsive design, currency formatting, final review |
 
 ---
 
