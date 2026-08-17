@@ -12,7 +12,8 @@ class DashboardService
         total_cents: total_brl_cents(snapshot),
         liquid_total_cents: liquid_total_brl_cents(snapshot),
         by_category_cents: by_category_cents(snapshot),
-        by_currency_cents: by_currency_cents(snapshot)
+        by_currency_cents: by_currency_cents(snapshot),
+        by_asset_cents: by_asset_cents(snapshot)
       }
     end
   end
@@ -37,5 +38,11 @@ class DashboardService
     snapshot.asset_entries
       .group_by { |e| e.asset.currency }
       .transform_values { |entries| entries.sum { |e| e.value_in_brl_cents } }
+  end
+
+  def by_asset_cents(snapshot)
+    snapshot.asset_entries.each_with_object({}) do |entry, hash|
+      hash[entry.asset_id] = entry.value_in_brl_cents
+    end
   end
 end

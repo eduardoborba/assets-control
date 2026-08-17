@@ -21,29 +21,41 @@ export default class extends Controller {
     if (!this.hasLineChartTarget || !this.dataValue.dates) return
 
     const data = this.dataValue
+    const datasets = [
+      {
+        label: "Total",
+        data: data.totals,
+        borderColor: "#2563eb",
+        backgroundColor: "rgba(37, 99, 235, 0.1)",
+        fill: true,
+        tension: 0.3
+      },
+      {
+        label: "Total Líquido",
+        data: data.liquid_totals,
+        borderColor: "#16a34a",
+        backgroundColor: "rgba(22, 163, 74, 0.1)",
+        fill: true,
+        tension: 0.3
+      }
+    ]
+
+    if (data.by_asset) {
+      data.by_asset.forEach(asset => {
+        datasets.push({
+          label: asset.label,
+          data: asset.data,
+          borderColor: asset.borderColor,
+          borderDash: [5, 5],
+          tension: 0.3,
+          hidden: true
+        })
+      })
+    }
+
     const chart = new Chart(this.lineChartTarget, {
       type: "line",
-      data: {
-        labels: data.dates,
-        datasets: [
-          {
-            label: "Total",
-            data: data.totals,
-            borderColor: "#2563eb",
-            backgroundColor: "rgba(37, 99, 235, 0.1)",
-            fill: true,
-            tension: 0.3
-          },
-          {
-            label: "Total Líquido",
-            data: data.liquid_totals,
-            borderColor: "#16a34a",
-            backgroundColor: "rgba(22, 163, 74, 0.1)",
-            fill: true,
-            tension: 0.3
-          }
-        ]
-      },
+      data: { labels: data.dates, datasets },
       options: {
         responsive: true,
         maintainAspectRatio: false,

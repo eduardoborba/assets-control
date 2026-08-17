@@ -32,6 +32,30 @@ RSpec.describe "Dashboard", type: :request do
         get root_path
         expect(response.body).to include(asset.name)
       end
+
+      it "includes per-asset chart data" do
+        get root_path
+        expect(response.body).to include("by_asset")
+      end
+    end
+
+    context "with two snapshots" do
+      let!(:asset) { create(:asset, :brl, category: "stocks") }
+      let!(:snapshot1) do
+        create(:snapshot, taken_on: 2.months.ago).tap do |s|
+          create(:asset_entry, snapshot: s, asset: asset, amount: 100_000)
+        end
+      end
+      let!(:snapshot2) do
+        create(:snapshot, taken_on: 1.month.ago).tap do |s|
+          create(:asset_entry, snapshot: s, asset: asset, amount: 110_000)
+        end
+      end
+
+      it "displays variation arrows for each asset" do
+        get root_path
+        expect(response.body).to include("text-green-600")
+      end
     end
 
     context "when there are no snapshots" do
