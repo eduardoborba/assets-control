@@ -55,5 +55,20 @@ RSpec.describe DashboardService do
 
       expect(result[0][:by_currency_cents]).to include("BRL" => 600_000, "USD" => 50_000)
     end
+
+    it "groups by asset" do
+      result = described_class.new.call
+
+      expect(result[0][:by_asset_cents]).to include(
+        brl_asset.id => 100_000,
+        usd_asset.id => 50_000,
+        illiquid_asset.id => 500_000
+      )
+      expect(result[1][:by_asset_cents]).to include(
+        brl_asset.id => 110_000,
+        usd_asset.id => 57_200,
+        illiquid_asset.id => 510_000
+      )
+    end
   end
 end

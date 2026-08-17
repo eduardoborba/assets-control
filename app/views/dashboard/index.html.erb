@@ -58,6 +58,7 @@
             <th class="px-4 py-2 text-right border-b">Taxa USD</th>
             <th class="px-4 py-2 text-right border-b">Valor BRL</th>
             <th class="px-4 py-2 text-right border-b">%</th>
+            <th class="px-4 py-2 text-right border-b">Variação</th>
           </tr>
         </thead>
         <tbody>
@@ -71,16 +72,31 @@
               <td class="px-4 py-2 border-b text-right">
                 <%= @total_cents > 0 ? "%.1f%%" % (entry.value_in_brl_cents.to_f / @total_cents * 100) : "0.0%%" %>
               </td>
+              <td class="px-4 py-2 border-b text-right">
+                <% prev_entry = @previous_entries[entry.asset_id] %>
+                <% if prev_entry %>
+                  <% prev_brl = prev_entry.value_in_brl_cents %>
+                  <% curr_brl = entry.value_in_brl_cents %>
+                  <% delta = curr_brl - prev_brl %>
+                  <% pct = prev_brl > 0 ? (delta.to_f / prev_brl * 100).round(2) : 0 %>
+                  <span class="<%= delta >= 0 ? 'text-green-600' : 'text-red-600' %>">
+                    <%= variation_arrow(delta) %>
+                    <%= pct >= 0 ? "+" : "" %><%= pct %>%
+                  </span>
+                <% else %>
+                  <span class="text-gray-400">—</span>
+                <% end %>
+              </td>
             </tr>
           <% end %>
         </tbody>
         <tfoot>
           <tr class="bg-gray-50 font-bold">
-            <td colspan="5" class="px-4 py-2 border-b text-right">Total</td>
+            <td colspan="6" class="px-4 py-2 border-b text-right">Total</td>
             <td class="px-4 py-2 border-b text-right"><%= brl_currency(@total_cents) %></td>
           </tr>
           <tr class="bg-gray-50 font-bold">
-            <td colspan="5" class="px-4 py-2 border-b text-right">Total Líquido</td>
+            <td colspan="6" class="px-4 py-2 border-b text-right">Total Líquido</td>
             <td class="px-4 py-2 border-b text-right"><%= brl_currency(@liquid_total_cents) %></td>
           </tr>
         </tfoot>
